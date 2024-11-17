@@ -31,6 +31,7 @@ namespace SpatialSys.UnitySDK.EditorSimulation
             SpatialBridge.eventService = new EditorEventService();
 
             new GameObject("[Spatial SDK] Visual Scripting Manager").AddComponent<UnitySDKVisualScriptingManager>();
+            new GameObject("[Spatial SDK] Interactable Manager").AddComponent<EditorInteractableManager>();
 
             // Create event system
             if (GameObject.FindObjectsOfType<EventSystem>().Length == 0)

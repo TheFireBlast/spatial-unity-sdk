@@ -5,6 +5,7 @@
         "SpatialSys.UnitySDK",
         "SpatialSys.UnitySDK.Editor",
         "Unity.VisualScripting.Core",
+        "Unity.VisualScripting.Flow",
         "Unity.RenderPipelines.Universal.Runtime",
         "SimpleJSONSim",
         "SpatialSys.UnitySDK.VisualScripting"

@@ -7,14 +7,19 @@ using UnityEngine.Rendering.Universal;
 
 namespace SpatialSys.UnitySDK.EditorSimulation
 {
-#pragma warning disable 0067 // Disable unused event warning
+// Disable unused event warning
+#pragma warning disable 0067
     public class EditorSpatialComponentService : ISpatialComponentService
     {
         public event Action<SpatialInteractable> onInitializeInteractable;
         public event Action<SpatialPointOfInterest> onInitializePointOfInterest;
         public event Action<SpatialTriggerEvent> onInitializeTriggerEvent;
 
-        public void InitializeInteractable(SpatialInteractable spatialInteractable) { }
+        public void InitializeInteractable(SpatialInteractable spatialInteractable) {
+            if (EditorInteractableManager.INSTANCE != null) {
+                EditorInteractableManager.INSTANCE.Register(spatialInteractable);
+            }
+        }
 
         public void InitializePointOfInterest(SpatialPointOfInterest spatialPointOfInterest) { }
 

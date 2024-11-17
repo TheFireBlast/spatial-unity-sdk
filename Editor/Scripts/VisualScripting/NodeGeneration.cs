@@ -85,16 +85,5 @@ namespace SpatialSys.UnitySDK.Editor
             // Only replace the second capture group, since that contains current array contents.
             return reg.Replace(target, $"$1{jsonArrayContents}$3");
         }
-
-#if !SPATIAL_UNITYSDK_INTERNAL
-        [InitializeOnLoadMethod]
-        private static void OnScriptsReloaded()
-        {
-            if (PlayerPrefs.GetString(GENERATED_VS_NODES_VERSION_PREFS_KEY) == PackageManagerUtility.currentVersion)
-            {
-                UnitBase.Rebuild();
-            }
-        }
-#endif
     }
 }

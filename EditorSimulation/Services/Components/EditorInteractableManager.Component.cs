@@ -93,6 +93,8 @@ public class EditorInteractableManager : MonoBehaviour
             }
         }
 
+        needAllocation.Sort((a, b) => a.d.CompareTo(b.d));
+
         // Mark all icons as inactive by default
         foreach (var entry in iconPool)
         {
@@ -100,7 +102,7 @@ public class EditorInteractableManager : MonoBehaviour
         }
 
         // Reuse previous interactables
-        foreach (var tuple in needAllocation.OrderBy(x => x.d).Take(MAX_ICONS))
+        needAllocation.RemoveAll(tuple =>
         {
             var entry = iconPool.Find(entry => entry.interactable == tuple.i);
             if (entry != null)
@@ -108,25 +110,27 @@ public class EditorInteractableManager : MonoBehaviour
                 entry.active = true;
                 entry.distance = tuple.d;
                 entry.UpdatePosition();
-                if (entry.IsVisible())
-                {
-                    needAllocation.Remove(tuple);
-                }
+                return entry.IsVisible();
             }
-        }
+            return false;
+        });
 
         // Initialize and update icons
         foreach (var tuple in needAllocation)
         {
-            var entry = iconPool.Find(entry => !entry.active);
+            var entry = iconPool.FindLast(entry => !entry.active);
             if (entry == null && iconPool.Count < MAX_ICONS)
                 entry = InstantiateIcon();
+            if (entry == null)
+                entry = iconPool.FindLast(entry => tuple.d < entry.distance);
             if (entry == null) break;
+
             entry.active = true;
             entry.distance = tuple.d;
             entry.interactable = tuple.i;
             entry.UpdatePosition();
-            if (!entry.IsVisible()) { 
+            if (!entry.IsVisible())
+            {
                 entry.active = false;
                 continue;
             }

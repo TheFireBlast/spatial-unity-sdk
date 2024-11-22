@@ -87,7 +87,7 @@ public class EditorInteractableManager : MonoBehaviour
         foreach (var i in ints)
         {
             float distance = Vector3.Distance(playerPos, i.transform.position);
-            if (distance <= i.visibilityRadius && i.enabled)
+            if (distance <= i.visibilityRadius && i.isActiveAndEnabled)
             {
                 needAllocation.Add((i, distance));
             }

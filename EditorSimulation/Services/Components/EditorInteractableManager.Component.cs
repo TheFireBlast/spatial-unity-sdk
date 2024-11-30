@@ -79,7 +79,7 @@ public class EditorInteractableManager : MonoBehaviour
         ints.Add(interactable);
     }
 
-    void Update()
+    void LateUpdate()
     {
         List<(SpatialInteractable i, float d)> needAllocation = new();
 

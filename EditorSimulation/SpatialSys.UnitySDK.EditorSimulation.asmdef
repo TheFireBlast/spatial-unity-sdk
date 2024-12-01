@@ -8,7 +8,8 @@
         "Unity.VisualScripting.Flow",
         "Unity.RenderPipelines.Universal.Runtime",
         "SimpleJSONSim",
-        "SpatialSys.UnitySDK.VisualScripting"
+        "SpatialSys.UnitySDK.VisualScripting",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

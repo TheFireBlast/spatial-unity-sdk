@@ -1,13 +1,10 @@
-using UnityEngine;
-using UnityEngine.UI;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using SpatialSys.UnitySDK;
 using SpatialSys.UnitySDK.Editor;
 using SpatialSys.UnitySDK.VisualScripting;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using static UnityEngine.EventSystems.EventTrigger;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class EditorInteractableManager : MonoBehaviour
 {
@@ -16,6 +13,8 @@ public class EditorInteractableManager : MonoBehaviour
     private HashSet<SpatialInteractable> ints = new();
     private SpatialInteractable activeInteractable = null;
     private List<InteractableUIElement> iconPool = new();
+
+    private TextMeshProUGUI interactText;
 
     private const int MAX_ICONS = 50;
 
@@ -51,8 +50,23 @@ public class EditorInteractableManager : MonoBehaviour
         // Make sure no interactables were initialized before this script
         RegenerateList();
 
+        // Create canvas
         var canvas = gameObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        // Create interactable text display
+        var textObject = new GameObject("Text");
+        textObject.transform.SetParent(transform);
+        interactText = textObject.AddComponent<TextMeshProUGUI>();
+        interactText.fontSize = 12f;
+        interactText.alignment = TextAlignmentOptions.MidlineLeft;
+        interactText.rectTransform.sizeDelta = new Vector3(120f, 50f);
+        interactText.rectTransform.pivot = new Vector2(0, 0.5f);
+        textObject.SetActive(false);
+
+        //TODO: add background to selected interactable
+
+        // Instantiate a few icons into the pool
         for (int i = 0; i < 10; i++)
         {
             InstantiateIcon();
@@ -169,6 +183,19 @@ public class EditorInteractableManager : MonoBehaviour
             else
                 c.a = 0.2f;
             entry.icon.color = c;
+        }
+
+        // Display interact text
+        if (activeInteractable != null)
+        {
+            interactText.gameObject.SetActive(true);
+            interactText.text = activeInteractable.interactText;
+            var icon = iconPool.Find(entry => entry.active && entry.interactable == activeInteractable);
+            interactText.rectTransform.position = icon.icon.rectTransform.position + new Vector3(15f, 0, 0);
+        }
+        else
+        {
+            interactText.gameObject.SetActive(false);
         }
 
         // Handle interaction

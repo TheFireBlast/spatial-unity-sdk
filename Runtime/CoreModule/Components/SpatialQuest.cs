@@ -164,7 +164,36 @@ namespace SpatialSys.UnitySDK
             foreach (var t in tasks)
             {
                 t._questID = id;
+#if UNITY_EDITOR
+                var innerTask = SpatialBridge.questService.quests[id].tasks.First(tt => tt.id == t.id);
+                innerTask.onStarted += () =>
+                {
+                    t.onStartedEvent.runtimeEvent?.Invoke();
+                    if (t.onStartedEvent.hasUnityEvent)
+                        t.onStartedEvent.unityEvent.Invoke();
+                };
+                innerTask.onCompleted += () =>
+                {
+                    t.onCompletedEvent.runtimeEvent?.Invoke();
+                    if (t.onCompletedEvent.hasUnityEvent)
+                        t.onCompletedEvent.unityEvent.Invoke();
+                };
+                innerTask.onPreviouslyCompleted += () =>
+                {
+                    t.onPreviouslyCompleted.runtimeEvent?.Invoke();
+                    if (t.onPreviouslyCompleted.hasUnityEvent)
+                        t.onPreviouslyCompleted.unityEvent.Invoke();
+                };
+#endif
             }
+#if UNITY_EDITOR
+            quest.onStarted += () =>
+            {
+                onStartedEvent.runtimeEvent?.Invoke();
+                if (onStartedEvent.hasUnityEvent)
+                    onStartedEvent.unityEvent.Invoke();
+            };
+#endif
         }
 
         /// <summary>

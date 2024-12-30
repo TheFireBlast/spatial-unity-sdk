@@ -122,7 +122,11 @@ namespace SpatialSys.UnitySDK.EditorSimulation
             status = QuestStatus.Completed;
             foreach (IQuestTask task in tasks)
             {
-                task.Complete();
+                //TODO: does this match the correct behavior?
+                if (task.status == QuestStatus.InProgress)
+                {
+                    task.Complete();
+                }
             }
             onCompleted?.Invoke();
         }
